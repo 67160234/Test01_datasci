@@ -5,13 +5,22 @@ import json
 
 st.set_page_config(page_title="ระบบทำนายความเสี่ยงนิสิตลาออก", page_icon="🎓")
 
+import os
+
 
 @st.cache_resource
 def load_model():
-    # แก้ชื่อไฟล์ให้ตรงกับที่ Save ไว้ใน Lab14
-    pipeline = joblib.load("student_dropout_pipeline.pkl")
-    with open("model_metadata.json", "r", encoding="utf-8") as f:
+    # หาตำแหน่งปัจจุบันของไฟล์ app.py
+    current_dir = os.path.dirname(__file__)
+
+    # รวม path เข้ากับชื่อไฟล์โมเดล
+    model_path = os.path.join(current_dir, "student_dropout_pipeline.pkl")
+    metadata_path = os.path.join(current_dir, "model_metadata.json")
+
+    pipeline = joblib.load(model_path)
+    with open(metadata_path, "r", encoding="utf-8") as f:
         metadata = json.load(f)
+
     return pipeline, metadata
 
 
